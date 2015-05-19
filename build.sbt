@@ -16,21 +16,15 @@ resolvers ++= Seq(
 
 resolvers += "Sonatype snapshots" at "http://oss.sonatype.org/content/repositories/snapshots/"
 
+val akkaVersion = "2.3.11"
+
 libraryDependencies ++= Seq(
-  "com.typesafe.akka"     %% "akka-actor"         % "2.3.11",
-  "com.typesafe.akka"     %% "akka-kernel"        % "2.3.11",
-  "com.typesafe.akka"     %% "akka-slf4j"         % "2.3.11",
-  "com.typesafe.akka"     %% "akka-testkit"       % "2.3.11",
-  "com.typesafe.akka"     %% "akka-remote"        % "2.3.11",
-  "org.slf4j"             % "slf4j-api"           % "1.5.2",
-  "ch.qos.logback"        % "logback-classic"     % "1.1.3",
-  "net.liftweb"           %% "lift-webkit"        % "2.6",
-  "net.liftweb"           %% "lift-testkit"       % "2.6" % "compile->default",
-  "net.liftweb"           %% "lift-mapper"        % "2.6",
+  "com.typesafe.akka"     %% "akka-actor"         % akkaVersion,
+  "com.typesafe.akka"     %% "akka-kernel"        % akkaVersion,
+  "com.typesafe.akka"     %% "akka-slf4j"         % akkaVersion,
+  "com.typesafe.akka"     %% "akka-testkit"       % akkaVersion,
+  "com.typesafe.akka"     %% "akka-remote"        % akkaVersion,
   "net.liftweb"           %% "lift-json"          % "2.6",
-  "net.liftweb"           %% "lift-json-ext"      % "2.6",
-  "net.liftmodules"       %% "lift-jquery-module_2.6" % "2.5",
-  "com.github.levkhomich" %% "akka-tracing-core"  % "0.4",
-  "com.github.nscala-time" %% "nscala-time"       % "2.0.0")
+  "com.github.levkhomich" %% "akka-tracing-core"  % "0.4")
 
 fork in run := true
