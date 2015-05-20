@@ -6,7 +6,6 @@ import com.twitter.finagle.Service
 import com.twitter.finagle.builder.ClientBuilder
 import com.twitter.finagle.http.Http
 import com.twitter.util.{Duration, Future}
-import net.liftweb.json.DefaultFormats
 import org.jboss.netty.handler.codec.http.HttpMethod.GET
 import org.jboss.netty.handler.codec.http.HttpVersion.HTTP_1_1
 import org.jboss.netty.handler.codec.http.{DefaultHttpRequest, HttpRequest, HttpResponse}
@@ -14,7 +13,6 @@ import org.jboss.netty.handler.codec.http.{DefaultHttpRequest, HttpRequest, Http
 class ServiceActor extends Actor with ActorTracing {
 
   implicit val httpQueryTimeout: Duration = Duration.fromMilliseconds(200)
-  implicit val formats = DefaultFormats
 
   val host: String = "localhost:7838"
 
@@ -45,6 +43,8 @@ class ServiceActor extends Actor with ActorTracing {
 
       val httpRequest = new DefaultHttpRequest(HTTP_1_1, GET, s"$id")
       handleHttpResponse(httpClient(httpRequest), sender(), incomingMsg)
+
+    case x => unhandled(x)
 
   }
 

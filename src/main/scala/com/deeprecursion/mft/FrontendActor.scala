@@ -4,14 +4,12 @@ import akka.actor.Actor
 import akka.pattern.{ask, pipe}
 import akka.util.Timeout
 import com.github.levkhomich.akka.tracing.ActorTracing
-import net.liftweb.json.DefaultFormats
 
 import scala.concurrent.duration._
 
 class FrontendActor extends Actor with ActorTracing {
 
   implicit val askTimeout: Timeout = 1000.milliseconds
-  implicit val formats = DefaultFormats
 
   val serviceActorPath = "akka.tcp://frontend@127.0.0.1:2553/user/service"
 
@@ -36,6 +34,8 @@ class FrontendActor extends Actor with ActorTracing {
 
       val serviceQuery = serviceActor ? Put(id).asChildOf(incomingMsg)
       serviceQuery.mapTo[Ack] map handleAck(incomingMsg) recover exceptionHandler(incomingMsg) pipeTo sender()
+
+    case x => unhandled(x)
 
   }
 
