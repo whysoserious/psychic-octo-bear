@@ -40,7 +40,6 @@ class FrontendActor extends Actor with ActorTracing {
   }
 
   def handleAck(msg: Put)(ack: Ack): Ack = {
-
     println("\t" + self.path.name + " received Ack with code: "+ ack.responseCode + " and id: " + ack.id)
     // close trace by marking response
     println("\t" + self.path.name + " acks: " + ack.id)
@@ -52,7 +51,7 @@ class FrontendActor extends Actor with ActorTracing {
       // trace exception
       trace.record(msg, e.toString)
       println("\tAck error: " + msg.id)
-      Ack(msg.id, 500)
+      Ack(msg.id, 500).asResponseTo(msg)
   }
 
 }

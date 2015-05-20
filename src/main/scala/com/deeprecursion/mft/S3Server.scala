@@ -16,7 +16,7 @@ object S3Server {
 
   val utf8 = Charset.forName("UTF-8")
 
-  def server: Server = {
+  def server(): Server = {
 
     val rootService = new Service[HttpRequest, HttpResponse] {
       def apply(request: HttpRequest): Future[HttpResponse] = {
