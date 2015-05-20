@@ -21,11 +21,11 @@ class FrontendActor extends Actor with ActorTracing {
 
   def receive = {
 
-    case msg @ Put(id) =>
+    case incomingMsg @ Put(id) =>
 
-      trace.sample(msg, "FrontendActor")
-      trace.recordKeyValue(msg, self.path.name, msg.name + " " + id)
-      trace.record(msg, id)
+      trace.sample(incomingMsg, "FrontendActor")
+      trace.recordKeyValue(incomingMsg, self.path.name, incomingMsg.name + " " + id)
+      trace.record(incomingMsg, id)
 
       val serviceActor = context.actorSelection(serviceActorPath)
 
@@ -34,8 +34,8 @@ class FrontendActor extends Actor with ActorTracing {
 
       import context.dispatcher
 
-      val serviceQuery = serviceActor ? Put(id).asChildOf(msg)
-      serviceQuery.mapTo[Ack] map handleAck(msg) recover exceptionHandler(msg) pipeTo sender()
+      val serviceQuery = serviceActor ? Put(id).asChildOf(incomingMsg)
+      serviceQuery.mapTo[Ack] map handleAck(incomingMsg) recover exceptionHandler(incomingMsg) pipeTo sender()
 
   }
 
