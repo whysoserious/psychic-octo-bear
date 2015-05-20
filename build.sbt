@@ -25,6 +25,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka"     %% "akka-testkit"       % akkaVersion,
   "com.typesafe.akka"     %% "akka-remote"        % akkaVersion,
   "net.liftweb"           %% "lift-json"          % "2.6",
-  "com.github.levkhomich" %% "akka-tracing-core"  % "0.4")
+  "com.github.levkhomich" %% "akka-tracing-core"  % "0.4",
+  "com.twitter"           %% "finagle-http"       % "6.25.0")
 
 fork in run := true
