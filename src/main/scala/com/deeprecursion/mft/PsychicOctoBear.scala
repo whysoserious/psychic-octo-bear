@@ -1,26 +1,17 @@
 package com.deeprecursion.mft
 
-import java.net.{InetSocketAddress, SocketAddress}
 import java.util.UUID
 
 import akka.actor._
-import akka.pattern.{ask, pipe}
+import akka.pattern.ask
 import akka.util.Timeout
-import com.github.levkhomich.akka.tracing.{ActorTracing, TracingSupport}
-import com.twitter.finagle.Service
-import com.twitter.finagle.builder.{ClientBuilder, Server, ServerBuilder}
-import com.twitter.finagle.http.Http
-import com.twitter.util.{Time, Future}
+import com.github.levkhomich.akka.tracing.TracingSupport
+import com.twitter.util.Time
 import com.typesafe.config._
-import net.liftweb.json._
-import org.jboss.netty.handler.codec.http.{DefaultHttpRequest, DefaultHttpResponse, HttpMethod, HttpRequest, HttpResponse, HttpResponseStatus, HttpVersion}
 
 import scala.concurrent.Await
 import scala.concurrent.duration._
-import scala.util.{Random, Try}
-
-import HttpVersion.HTTP_1_1
-import HttpMethod.GET
+import scala.util.Try
 
 
 case class Put(id: String) extends TracingSupport {
@@ -33,6 +24,7 @@ case class Ack(id: String, responseCode: Int) extends TracingSupport {
 
 
 object PsychicOctoBear extends App {
+
   implicit val askTimeout: Timeout = 1.second
 
   val config = ConfigFactory.load("psychic-octo-bear.conf")
@@ -50,14 +42,14 @@ object PsychicOctoBear extends App {
 
   // Start HTTP server
 
-  val server = S3Server.server()
+  val server = S3Server.server(backendSystem)
 
   Thread.sleep(2000)
 
   Try {
 
     // send messages
-    for (_ <- 1 to 10) {
+    for (_ <- 1 to 5) {
       val uuid = UUID.randomUUID().toString
       println("Call Web: " + uuid)
       val future = web ? Put(uuid)
@@ -70,10 +62,6 @@ object PsychicOctoBear extends App {
   }
 
   server.close(Time.Bottom)
-  
-  backendSystem.awaitTermination(1.second)
-  frontendSystem.awaitTermination(1.second)
-
   backendSystem.shutdown()
   frontendSystem.shutdown()
 
